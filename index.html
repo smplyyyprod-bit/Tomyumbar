@@ -54,15 +54,14 @@
   <!-- ============================================================
        1. HERO
        Purpose: first-impression, cinematic brand statement.
-       Full-bleed placeholder reserved for a future looping hero
-       video (Round 2). Wordmark + tagline sit as a static overlay
-       so the layout already reads correctly before video lands.
+       Five clips play back-to-back as one continuous background loop
+       (see js/hero-video.js) — two <video> elements crossfade into
+       each other so there's never a cut, black frame, or reload.
        ============================================================ -->
   <section class="hero">
-    <div class="hero__media" id="heroMedia" aria-hidden="true">
-      <div class="hero__media-placeholder">
-        <span class="hero__media-label">Hero video placeholder — 16:9, full-bleed, added in Round 2</span>
-      </div>
+    <div class="hero__media" id="heroMedia" aria-hidden="true" style="background-image: url('assets/images/hero-poster.jpg');">
+      <video class="hero__video is-active" id="heroVideoA" muted playsinline preload="auto" poster="assets/images/hero-poster.jpg"></video>
+      <video class="hero__video" id="heroVideoB" muted playsinline preload="auto"></video>
     </div>
 
     <div class="hero__scrim"></div>
@@ -303,5 +302,6 @@
 
 <script src="js/menu-data.js"></script>
 <script src="js/main.js"></script>
+<script src="js/hero-video.js"></script>
 </body>
 </html>

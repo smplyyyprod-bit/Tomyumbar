@@ -136,10 +136,22 @@ actual space.
 
 ## Hero section
 
-Full-viewport. Currently a placeholder block reserved for a future looping
-video (see `#heroMedia` in `index.html`) — replace its contents with an
-actual `<video autoplay loop muted playsinline>` once footage exists, keep
-the same 25–35% dark overlay (`.hero__scrim`) over it for text legibility.
+Full-viewport. Background is a 5-clip video playlist (`js/hero-video.js`)
+that plays back-to-back on loop with a ~400ms crossfade between clips —
+two `<video>` elements (`#heroVideoA` / `#heroVideoB`) swap an `is-active`
+class while the standby element preloads the next clip, so there's never a
+black frame or stall. `HERO_PLAYLIST` in that file is the order of truth;
+edit it to reorder/add/remove clips, don't hand-edit the `<video>` tags.
+Source clips are iPhone H.264 exports remuxed with `-movflags +faststart`
+(moov atom moved to the front) — always do this to any new clip before
+adding it, or browsers that can't range-request the file (some static
+hosts, some dev servers) will fail to demux it entirely, not just load
+slowly. `assets/images/hero-poster.jpg` is the fallback frame (both a CSS
+background on `#heroMedia` and a `poster` attribute on the first video) —
+regenerate it (`ffmpeg -i <clip> -ss 1 -frames:v 1 poster.jpg`) if clip 1
+changes. Scrim (`.hero__scrim`) sits at 45–55% black, not the lighter
+25–35% general guidance below — video needs more contrast suppression
+than a static photo to keep text legible.
 
 **Open item to revisit:** the current hero ships two CTAs ("View Full Menu"
 + "Reserve a Table"). Premium hero conventions (and this file, generally)
