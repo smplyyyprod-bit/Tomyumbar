@@ -202,8 +202,11 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 .nav-toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
-  width: 28px;
+  width: 44px;
+  padding: 14px 8px;
+  margin: -14px -8px;
 }
 
 .nav-toggle span {
@@ -401,6 +404,27 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
   background: var(--color-paper);
   border-block: 1px solid var(--color-line);
   margin-bottom: var(--space-lg);
+}
+
+.menu-nav-wrap::before,
+.menu-nav-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.menu-nav-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-paper), transparent);
+}
+
+.menu-nav-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-paper), transparent);
 }
 
 .menu-nav {
@@ -650,9 +674,11 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
   }
 }
 
-@media (max-width: 720px) {
-  :root { --header-height: 64px; }
-
+/* Header nav switches to the hamburger menu well before the content
+   breakpoints below — the full nav + logo + CTAs stop fitting on one line
+   around ~1000px, long before phone-sized stacking is needed (tablets
+   included), so this gets its own wider breakpoint. */
+@media (max-width: 1090px) {
   .primary-nav {
     position: fixed;
     inset: var(--header-height) 0 0 0;
@@ -673,6 +699,10 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
   .site-header__actions .btn--ghost { display: none; }
 
   .nav-toggle { display: flex; }
+}
+
+@media (max-width: 720px) {
+  :root { --header-height: 64px; }
 
   .hero__actions { flex-direction: column; width: 100%; }
   .hero__actions .btn { width: 100%; }
