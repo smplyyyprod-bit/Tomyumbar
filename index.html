@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TomYumBar — Modern Pan Asian Kitchen</title>
+<meta name="description" content="TomYumBar — Modern Pan Asian Kitchen. Est. 2016.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER / PRIMARY NAV
+     Purpose: brand presence + wayfinding. Transparent over hero,
+     solid background once page scrolls (structure only — the
+     scroll-state class toggle is functional, not decorative).
+     ============================================================ -->
+<header class="site-header" id="siteHeader">
+  <div class="container site-header__row">
+    <a href="#top" class="wordmark">TomYum<span>Bar</span></a>
+
+    <nav class="primary-nav" id="primaryNav" aria-label="Primary">
+      <ul>
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#signatures">Signatures</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#visit">Visit</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href="#visit" class="btn btn--ghost">Reserve</a>
+      <a href="#menu" class="btn btn--solid">Order Online</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================================================
+       1. HERO
+       Purpose: first-impression, cinematic brand statement.
+       Full-bleed placeholder reserved for a future looping hero
+       video (Round 2). Wordmark + tagline sit as a static overlay
+       so the layout already reads correctly before video lands.
+       ============================================================ -->
+  <section class="hero">
+    <div class="hero__media" id="heroMedia" aria-hidden="true">
+      <div class="hero__media-placeholder">
+        <span class="hero__media-label">Hero video placeholder — 16:9, full-bleed, added in Round 2</span>
+      </div>
+    </div>
+
+    <div class="hero__scrim"></div>
+
+    <div class="hero__content container">
+      <p class="eyebrow eyebrow--light">Tashkent · Est. 2016</p>
+      <h1 class="hero__title">Modern Pan&nbsp;Asian Kitchen</h1>
+      <p class="hero__subtitle">Fire, smoke and citrus — the flavors of Asia,<br>plated for the modern table.</p>
+      <div class="hero__actions">
+        <a href="#menu" class="btn btn--solid btn--lg">View Full Menu</a>
+        <a href="#visit" class="btn btn--outline-light btn--lg">Reserve a Table</a>
+      </div>
+    </div>
+
+    <a href="#story" class="hero__scroll-cue" aria-label="Scroll to next section">Scroll</a>
+  </section>
+
+  <!-- ============================================================
+       2. BRAND STORY / PHILOSOPHY
+       Purpose: editorial pause after the cinematic hero — establishes
+       the "why" before the "what." Split layout: real interior
+       photography paired with a short, confident statement.
+       Typography: serif display headline, generous line-height body.
+       ============================================================ -->
+  <section class="story" id="story">
+    <div class="container story__grid">
+      <div class="story__image">
+        <img src="assets/images/storefront-01.jpg" alt="TomYumBar storefront and dining room signage">
+      </div>
+      <div class="story__copy">
+        <p class="eyebrow">Our Story</p>
+        <h2>Where Pan-Asian tradition meets modern craft</h2>
+        <p class="story__lede">
+          Since 2016, TomYumBar has reimagined the flavors of Thailand, Japan, China and Vietnam
+          through a single, modern lens — bold spice, precise technique, and a room built for
+          long, unhurried tables.
+        </p>
+        <p>
+          Every dish moves between two worlds: the comfort of a night-market bowl and the
+          composure of fine dining. Woven rattan, warm wood and deep lacquer red set the stage;
+          the kitchen does the rest.
+        </p>
+        <a href="#gallery" class="text-link">Step inside the space →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3. SIGNATURE DISHES
+       Purpose: appetite-building teaser before the full menu —
+       3-4 hero dishes shown large, image-led, with minimal copy.
+       Not the full menu; a curated "best of" moment.
+       ============================================================ -->
+  <section class="signatures" id="signatures">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Chef's Selection</p>
+        <h2>Signature Dishes</h2>
+      </div>
+    </div>
+
+    <div class="signatures__row">
+      <article class="signature-card signature-card--wide">
+        <div class="signature-card__media">
+          <img src="assets/images/dish-sushi-platter.jpg" alt="Nigiri sushi platter with wasabi, ginger and soy">
+        </div>
+        <div class="signature-card__caption">
+          <h3>Nigiri Selection</h3>
+          <p>Salmon, tuna, tiger prawn &amp; seared eel — hand-pressed to order.</p>
+        </div>
+      </article>
+
+      <article class="signature-card">
+        <div class="signature-card__media signature-card__media--placeholder">
+          <span>Dish image placeholder</span>
+        </div>
+        <div class="signature-card__caption">
+          <h3>Tom Yum Kung</h3>
+          <p>The house classic — river prawn, lemongrass, chili oil.</p>
+        </div>
+      </article>
+
+      <article class="signature-card">
+        <div class="signature-card__media signature-card__media--placeholder">
+          <span>Dish image placeholder</span>
+        </div>
+        <div class="signature-card__caption">
+          <h3>Black Pepper Wagyu</h3>
+          <p>Wok-charred wagyu, scallion, roasted garlic.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       4. FULL MENU
+       Purpose: the functional core of the page — the complete,
+       browsable menu. Sticky category navigation + dish cards.
+       Content is rendered from js/menu-data.js so the placeholder
+       items can be swapped for the real TomYumBar menu wholesale,
+       without touching layout/markup.
+       ============================================================ -->
+  <section class="menu-section" id="menu">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Full Menu</p>
+        <h2>Explore the Menu</h2>
+        <p class="section-heading__note">
+          Menu content below is placeholder structure for Round 1 — the complete,
+          current TomYumBar menu will be dropped in once provided.
+        </p>
+      </div>
+    </div>
+
+    <div class="menu-nav-wrap" id="menuNavWrap">
+      <nav class="menu-nav container" id="menuNav" aria-label="Menu categories">
+        <!-- category chips injected by js/main.js from menu-data.js -->
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="menu-categories" id="menuCategories">
+        <!-- category sections + dish cards injected by js/main.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5. GALLERY / AMBIENCE
+       Purpose: ground the brand in the physical room — texture,
+       light, materials. Full-bleed image sequence, no copy needed.
+       ============================================================ -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">The Room</p>
+        <h2>An Atmosphere Worth Staying For</h2>
+      </div>
+    </div>
+    <div class="gallery__grid">
+      <div class="gallery__item gallery__item--tall">
+        <img src="assets/images/interior-01.jpg" alt="Woven rattan pendant lights over the dining room">
+      </div>
+      <div class="gallery__item">
+        <img src="assets/images/interior-02.jpg" alt="TomYumBar signage detail with warm pendant lighting">
+      </div>
+      <div class="gallery__item gallery__item--placeholder">
+        <span>Gallery image placeholder</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       6. VISIT / RESERVE
+       Purpose: conversion section — location, hours, contact,
+       reservation + delivery CTAs. Kept plain and functional.
+       ============================================================ -->
+  <section class="visit" id="visit">
+    <div class="container visit__grid">
+      <div class="visit__info">
+        <p class="eyebrow">Visit Us</p>
+        <h2>Plan Your Table</h2>
+
+        <dl class="visit__details">
+          <div>
+            <dt>Location</dt>
+            <dd>Tashkent, Uzbekistan</dd>
+          </div>
+          <div>
+            <dt>Hours</dt>
+            <dd>Daily · 10:00 — 23:00</dd>
+          </div>
+          <div>
+            <dt>Contact</dt>
+            <dd>+998 xx xxx xx xx</dd>
+          </div>
+        </dl>
+
+        <div class="visit__actions">
+          <a href="#" class="btn btn--solid btn--lg">Reserve a Table</a>
+          <a href="#menu" class="btn btn--outline btn--lg">Order Online</a>
+        </div>
+      </div>
+
+      <div class="visit__map-placeholder" aria-hidden="true">
+        <span>Map embed placeholder</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     Purpose: sitemap, secondary links, legal, closing brand mark.
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <a href="#top" class="wordmark wordmark--footer">TomYum<span>Bar</span></a>
+      <p>Modern Pan Asian Kitchen — est. 2016</p>
+    </div>
+
+    <div class="site-footer__col">
+      <p class="site-footer__heading">Explore</p>
+      <ul>
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#signatures">Signatures</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <p class="site-footer__heading">Visit</p>
+      <ul>
+        <li><a href="#visit">Location &amp; Hours</a></li>
+        <li><a href="#visit">Reservations</a></li>
+        <li><a href="#menu">Order Online</a></li>
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <p class="site-footer__heading">Follow</p>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Telegram</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>© 2026 TomYumBar. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="js/menu-data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
