@@ -158,6 +158,31 @@ it.
 - Don't summarize or drop menu items — the full, current menu must always be
   present, per the client's explicit requirement.
 
+## Mobile
+
+Every change ships checked on mobile, not just verified there exists a media
+query. Before calling anything done:
+
+- Test real interaction, not just layout — open the mobile nav, tap a link,
+  confirm the overlay actually closes and the destination is visible (this
+  broke once already: the nav stayed open over the scrolled content because
+  nothing removed `.is-open` on link tap).
+- Check the tablet zone (~721–1090px), not just phone widths. The desktop
+  header nav (logo + 5 links + 2 CTAs) doesn't actually fit until ~1080px,
+  so anything narrower needs the hamburger — that gap wasn't obvious from
+  looking at 390px and 1440px alone and caused the nav to wrap onto two
+  lines for every tablet size in between. When adding anything to the header
+  row, re-check this range.
+- Interactive elements need a real tap target, not just a visible one — the
+  hamburger icon's bars were 28×16px but its clickable box is padded out to
+  44×44px (`.nav-toggle`) without changing how it looks. Apply the same
+  padding+negative-margin pattern to any other small icon-only control.
+- Confirm no horizontal scroll at 320–430px (`document.documentElement
+  .scrollWidth` should equal `clientWidth`).
+- When something scrolls horizontally on purpose (menu category pills), it
+  needs a visual hint that it does — the edge fade on `.menu-nav-wrap` is
+  the existing pattern to reuse, not a one-off.
+
 ## Motion (Round 2+, not yet implemented)
 
 When animation work starts:
