@@ -266,7 +266,7 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 .hero__scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.58) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.72) 100%);
 }
 
 .hero__content {
