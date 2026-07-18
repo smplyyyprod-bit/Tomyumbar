@@ -63,24 +63,38 @@ Tomyumbar/
         ├── interior-01.jpg
         ├── interior-02.jpg
         ├── dish-sushi-platter.jpg
-        └── logo.jpg         ← reference logo asset (see Logo section)
+        ├── logo-full-dark.png      ← full lockup, black ink, transparent (light backgrounds)
+        ├── logo-full-light.png     ← full lockup, cream ink, transparent (dark backgrounds)
+        ├── logo-wordmark-dark.png  ← "TomYumBar" only, black ink (nav, light state)
+        └── logo-wordmark-light.png ← "TomYumBar" only, cream ink (nav, dark state)
 ```
 
 ## Logo
 
-`assets/images/logo.jpg` — cropped from the client's IMG_1339 (the dark
-interior shot with the wordmark overlay), with a dark scrim baked in to
-flatten the busy rattan-lamp texture behind the type. It's a self-contained
-dark card, not a transparent cutout, which is deliberate: it reads
-consistently over both the transparent-over-hero header state and the solid
-cream header state without needing two logo variants.
+Real logo, supplied by the client (IMG_1329): serif "TomYumBar®" wordmark,
+"Modern Pan Asian Kitchen" subtitle, three chili-pepper marks, "est. 2016."
+Source file had a baked-in white background — regenerated as true
+transparent-PNG pairs so the mark works on both light and dark sections
+without a background card:
 
-Used in the header (`.wordmark img`, 40px tall) and footer
-(`.wordmark--footer img`, 56px tall) in place of the old CSS text wordmark.
+- **Dark ink pair** (`logo-full-dark.png` / `logo-wordmark-dark.png`) — for
+  light backgrounds (solid cream header state, light sections).
+- **Light ink pair** (`logo-full-light.png` / `logo-wordmark-light.png`) —
+  ink recolored to cream, for dark backgrounds (transparent-over-hero header
+  state, footer). The red chili marks are left untouched in both — red reads
+  fine on both grounds.
+- **Wordmark-only crop** — just the "TomYumBar" line, no subtitle/chilis/est.
+  year, for the compact nav slot where the full lockup would be illegible at
+  nav height.
 
-If the client later supplies a proper transparent-background vector/PNG
-logo export, swap it in directly — it'll be cleaner than this photo crop,
-which was always a stand-in for a real logo file.
+The header (`.wordmark`) swaps between the wordmark-only light/dark pair via
+CSS (`.site-header--solid` toggles which `<img>` is visible) — no JS needed,
+both are loaded and only one is shown at a time. The footer always uses the
+full light-ink lockup since the footer background is always dark.
+
+If a higher-resolution or vector export becomes available later, regenerate
+these four PNGs from it the same way rather than re-cropping a rasterized
+version of a rasterized version.
 
 ## Typography
 
