@@ -162,12 +162,14 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 .wordmark {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .wordmark img {
   display: block;
   height: 34px;
   width: auto;
+  flex-shrink: 0;
 }
 
 .wordmark img.wordmark__img--dark { display: none; }
@@ -189,6 +191,10 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 
 .site-header--solid .primary-nav a { color: var(--color-ink); }
 .primary-nav a:hover { color: var(--color-gold); }
+
+.primary-nav__actions {
+  display: none;
+}
 
 .site-header__actions {
   display: flex;
@@ -696,7 +702,15 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 
   .primary-nav a { color: var(--color-ink); font-size: 1.1rem; }
 
-  .site-header__actions .btn--ghost { display: none; }
+  .primary-nav__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  .site-header__actions .btn--ghost,
+  .site-header__actions .btn--solid { display: none; }
 
   .nav-toggle { display: flex; }
 }
