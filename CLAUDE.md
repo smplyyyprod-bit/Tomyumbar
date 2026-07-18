@@ -56,17 +56,23 @@ Tomyumbar/
 │   └── styles.css
 ├── js/
 │   ├── menu-data.js      ← swap this file for real menu content
-│   └── main.js
+│   ├── main.js
+│   ├── hero-video.js     ← hero background playlist/crossfade
+│   └── intro.js          ← one-time intro overlay → hero handoff
 └── assets/
-    └── images/
-        ├── storefront-01.jpg
-        ├── interior-01.jpg
-        ├── interior-02.jpg
-        ├── dish-sushi-platter.jpg
-        ├── logo-full-dark.png      ← full lockup, black ink, transparent (light backgrounds)
-        ├── logo-full-light.png     ← full lockup, cream ink, transparent (dark backgrounds)
-        ├── logo-wordmark-dark.png  ← "TomYumBar" only, black ink (nav, light state)
-        └── logo-wordmark-light.png ← "TomYumBar" only, cream ink (nav, dark state)
+    ├── images/
+    │   ├── storefront-01.jpg
+    │   ├── interior-01.jpg
+    │   ├── interior-02.jpg
+    │   ├── dish-sushi-platter.jpg
+    │   ├── hero-poster.jpg        ← hero fallback frame, see Hero section
+    │   ├── logo-full-dark.png     ← full lockup, black ink, transparent (light backgrounds)
+    │   ├── logo-full-light.png    ← full lockup, cream ink, transparent (dark backgrounds)
+    │   ├── logo-wordmark-dark.png ← "TomYumBar" only, black ink (nav, light state)
+    │   └── logo-wordmark-light.png ← "TomYumBar" only, cream ink (nav, dark state)
+    └── videos/
+        ├── intro.mp4             ← one-time intro, see Intro overlay
+        └── hero-01.mp4 … hero-05.mp4 ← hero playlist, in playback order
 ```
 
 ## Logo
@@ -149,9 +155,36 @@ hosts, some dev servers) will fail to demux it entirely, not just load
 slowly. `assets/images/hero-poster.jpg` is the fallback frame (both a CSS
 background on `#heroMedia` and a `poster` attribute on the first video) —
 regenerate it (`ffmpeg -i <clip> -ss 1 -frames:v 1 poster.jpg`) if clip 1
-changes. Scrim (`.hero__scrim`) sits at 45–55% black, not the lighter
-25–35% general guidance below — video needs more contrast suppression
-than a static photo to keep text legible.
+changes. Scrim (`.hero__scrim`) sits at ~60–72% black (client asked for it
+darker than the initial 45–55% pass), well above the lighter 25–35%
+general guidance below — video needs more contrast suppression than a
+static photo to keep text legible, and this brand wanted it darker still.
+
+## Intro overlay
+
+A one-time, full-screen cinematic intro (`assets/videos/intro.mp4`, ~7s)
+plays before the hero on every real page load — `js/intro.js`, markup at
+the very top of `<body>` in `index.html`. Fixed, `z-index: 9999`, blocks
+scroll via `.intro-active` on `<html>`. Hands off to the hero with a 1s
+crossfade (`--intro-fade` token, shared by both elements so JS and CSS
+can't drift out of sync) once **both** are true: the intro clip has
+ended, and `#heroVideoA` (the first hero clip) is buffered enough to
+play smoothly — so the hero is always already playing, silently, before
+it's ever revealed. Skipped entirely under `prefers-reduced-motion`
+(hero shown immediately, no lock, no fade) and if JS is unavailable
+(`<noscript>` fallback right after the overlay markup).
+
+**The bug that actually happened here, worth knowing about:** both the
+intro-ended and hero-ready checks originally relied only on event
+listeners (`ended`, `canplay`, `canplaythrough`). On a fast connection —
+or in any environment where the browser races through a short, already-
+cached clip — that event can fire *before* the script finishes attaching
+its listener, and a `{ once: true }` listener registered after the fact
+never sees it. The fix is checking the synchronous state first
+(`video.ended`/`video.error`, `video.readyState`) and only falling back
+to an event listener if that state hasn't been reached yet. Apply the
+same pattern to any future "wait for this video to reach some state"
+logic — don't rely on the event alone.
 
 **Open item to revisit:** the current hero ships two CTAs ("View Full Menu"
 + "Reserve a Table"). Premium hero conventions (and this file, generally)

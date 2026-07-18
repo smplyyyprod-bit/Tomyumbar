@@ -8,9 +8,42 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Intro + first hero clip are the critical path for the opening moment —
+     hint the browser to start fetching both before it even reaches the
+     <video> tags in the body. -->
+<link rel="preload" as="video" href="assets/videos/intro.mp4" fetchpriority="high">
+<link rel="preload" as="video" href="assets/videos/hero-01.mp4" fetchpriority="high">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+<!-- ============================================================
+     INTRO OVERLAY
+     Purpose: one-time, full-screen cinematic intro that plays once
+     per page load. Sits above everything (z-index 9999), blocks
+     scroll/interaction while active, and hands off to the hero via
+     a ~1s crossfade once both the intro has ended AND the first
+     hero clip is buffered enough to play smoothly — see
+     js/intro.js. Skipped entirely under prefers-reduced-motion.
+     ============================================================ -->
+<div class="intro-overlay" id="introOverlay" aria-hidden="true">
+  <video
+    class="intro-overlay__video"
+    id="introVideo"
+    src="assets/videos/intro.mp4"
+    autoplay
+    muted
+    playsinline
+    preload="auto"
+    fetchpriority="high"
+  ></video>
+</div>
+<noscript>
+  <style>
+    .intro-overlay { display: none !important; }
+    .hero { opacity: 1 !important; }
+  </style>
+</noscript>
 
 <!-- ============================================================
      HEADER / PRIMARY NAV
@@ -58,7 +91,7 @@
        (see js/hero-video.js) — two <video> elements crossfade into
        each other so there's never a cut, black frame, or reload.
        ============================================================ -->
-  <section class="hero">
+  <section class="hero" id="hero">
     <div class="hero__media" id="heroMedia" aria-hidden="true" style="background-image: url('assets/images/hero-poster.jpg');">
       <video class="hero__video is-active" id="heroVideoA" muted playsinline preload="auto" poster="assets/images/hero-poster.jpg"></video>
       <video class="hero__video" id="heroVideoB" muted playsinline preload="auto"></video>
@@ -303,5 +336,6 @@
 <script src="js/menu-data.js"></script>
 <script src="js/main.js"></script>
 <script src="js/hero-video.js"></script>
+<script src="js/intro.js"></script>
 </body>
 </html>
