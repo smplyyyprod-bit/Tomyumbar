@@ -220,13 +220,14 @@ html.intro-active {
 
 .primary-nav ul {
   display: flex;
-  gap: var(--space-lg);
+  gap: 1.75rem;
 }
 
 .primary-nav a {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--color-cream);
+  white-space: nowrap;
 }
 
 .site-header--solid .primary-nav a { color: var(--color-ink); }
@@ -244,6 +245,39 @@ html.intro-active {
 
 .site-header--solid .btn--ghost { color: var(--color-ink); }
 .site-header:not(.site-header--solid) .btn--ghost { color: var(--color-cream); border-color: var(--color-line-light); }
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.lang-switch__btn {
+  color: var(--color-cream);
+  opacity: 0.55;
+}
+
+.lang-switch__btn.is-active {
+  color: var(--color-gold);
+  opacity: 1;
+}
+
+.lang-switch__btn:not(.is-active):hover {
+  opacity: 0.85;
+}
+
+.lang-switch__divider {
+  color: var(--color-cream);
+  opacity: 0.35;
+}
+
+.site-header--solid .lang-switch__btn { color: var(--color-ink); }
+.site-header--solid .lang-switch__btn.is-active { color: var(--color-maroon); }
+.site-header--solid .lang-switch__divider { color: var(--color-ink); }
 
 .nav-toggle {
   display: none;
@@ -529,7 +563,7 @@ html.intro-active {
 
 .menu-card {
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 96px minmax(0, 1fr);
   gap: var(--space-sm);
   padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--color-line);
@@ -562,6 +596,7 @@ html.intro-active {
 
 .menu-card__name {
   font-size: 1.05rem;
+  min-width: 0;
 }
 
 .menu-card__price {
@@ -732,10 +767,12 @@ html.intro-active {
 }
 
 /* Header nav switches to the hamburger menu well before the content
-   breakpoints below — the full nav + logo + CTAs stop fitting on one line
-   around ~1000px, long before phone-sized stacking is needed (tablets
-   included), so this gets its own wider breakpoint. */
-@media (max-width: 1090px) {
+   breakpoints below — the full nav (Russian labels run longer than the
+   English originals) + logo + lang switch + CTAs don't fit on one line
+   until just past the 1200px container cap, long before phone-sized
+   stacking is needed (tablets included), so this gets its own wider
+   breakpoint. */
+@media (max-width: 1210px) {
   .primary-nav {
     position: fixed;
     inset: var(--header-height) 0 0 0;
@@ -781,4 +818,16 @@ html.intro-active {
   .gallery__item--tall { grid-row: span 1; }
 
   .site-footer__grid { grid-template-columns: 1fr; gap: var(--space-lg); }
+}
+
+/* The wordmark-only logo crop is a wide, short image (~6.9:1) — at its
+   normal header height it's ~235px wide, which just fits next to the
+   hamburger on a phone... until the language switch also needs room.
+   Shrink it further on the narrowest phones so nothing gets pushed
+   off-screen (this genuinely happened: the hamburger button became
+   unreachable below ~370px). */
+@media (max-width: 400px) {
+  .wordmark img { height: 26px; }
+  .lang-switch { gap: 0.3em; font-size: 0.7rem; }
+  .site-header__actions { gap: 0.6rem; }
 }

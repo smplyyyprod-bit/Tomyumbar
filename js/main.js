@@ -10,20 +10,30 @@
  * ------------------------------------------------------------------
  */
 
-(function renderMenu() {
+// Renders the menu in the given language ("ru" | "en") — exposed on
+// window so js/i18n.js can re-run it when the user switches language,
+// since menu content lives in data (menu-data.js), not static HTML.
+function renderMenu(lang) {
   const navEl = document.getElementById("menuNav");
   const categoriesEl = document.getElementById("menuCategories");
   if (!navEl || !categoriesEl || typeof MENU_DATA === "undefined") return;
+
+  const currencyLabel = lang === "en" ? "UZS" : "сум";
+
+  navEl.innerHTML = "";
+  categoriesEl.innerHTML = "";
 
   const navFragment = document.createDocumentFragment();
   const categoriesFragment = document.createDocumentFragment();
 
   MENU_DATA.forEach((category) => {
+    const categoryName = category.name[lang] || category.name.ru;
+
     // Nav chip
     const navLink = document.createElement("a");
     navLink.href = `#cat-${category.id}`;
     navLink.className = "menu-nav__chip";
-    navLink.textContent = category.name;
+    navLink.textContent = categoryName;
     navFragment.appendChild(navLink);
 
     // Category block
@@ -33,7 +43,7 @@
 
     const heading = document.createElement("h3");
     heading.className = "menu-category__title";
-    heading.textContent = category.name;
+    heading.textContent = categoryName;
     section.appendChild(heading);
 
     const grid = document.createElement("div");
@@ -43,18 +53,21 @@
       const card = document.createElement("article");
       card.className = "menu-card";
 
+      const itemName = item.name[lang] || item.name.ru;
+      const itemDesc = (item.description && (item.description[lang] || item.description.ru)) || "";
+
       const mediaHtml = item.image
-        ? `<div class="menu-card__media"><img src="${item.image}" alt="${item.name}"></div>`
-        : `<div class="menu-card__media menu-card__media--placeholder"><span>Image</span></div>`;
+        ? `<div class="menu-card__media"><img src="${item.image}" alt="${itemName}"></div>`
+        : `<div class="menu-card__media menu-card__media--placeholder"><span data-i18n="menu.imagePlaceholder">${lang === "en" ? "Image" : "Фото"}</span></div>`;
 
       card.innerHTML = `
         ${mediaHtml}
         <div class="menu-card__body">
           <div class="menu-card__row">
-            <h4 class="menu-card__name">${item.name}</h4>
-            <span class="menu-card__price">${item.price}<span class="menu-card__currency"> UZS</span></span>
+            <h4 class="menu-card__name">${itemName}</h4>
+            <span class="menu-card__price">${item.price}<span class="menu-card__currency"> ${currencyLabel}</span></span>
           </div>
-          <p class="menu-card__desc">${item.description || ""}</p>
+          <p class="menu-card__desc">${itemDesc}</p>
         </div>
       `;
       grid.appendChild(card);
@@ -66,7 +79,10 @@
 
   navEl.appendChild(navFragment);
   categoriesEl.appendChild(categoriesFragment);
-})();
+}
+
+window.TYB_renderMenu = renderMenu;
+renderMenu("ru");
 
 // Mobile nav toggle
 (function mobileNav() {

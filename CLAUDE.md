@@ -55,10 +55,11 @@ Tomyumbar/
 ├── css/
 │   └── styles.css
 ├── js/
-│   ├── menu-data.js      ← swap this file for real menu content
+│   ├── menu-data.js      ← swap this file for real menu content (bilingual, see Language)
 │   ├── main.js
 │   ├── hero-video.js     ← hero background playlist/crossfade
-│   └── intro.js          ← one-time intro overlay → hero handoff
+│   ├── intro.js          ← one-time intro overlay → hero handoff
+│   └── i18n.js            ← RU/EN language switch, see Language
 └── assets/
     ├── images/
     │   ├── storefront-01.jpg
@@ -203,6 +204,56 @@ it.
 - Don't summarize or drop menu items — the full, current menu must always be
   present, per the client's explicit requirement.
 
+## Language
+
+Russian is the default/primary language (client's explicit requirement — this
+is a Tashkent restaurant); English is a secondary toggle, not the other way
+around. This shapes how content gets added:
+
+- **The HTML in `index.html` is authored in Russian directly** — not English
+  with a translation layer bolted on. This avoids a flash-of-English on every
+  load (no JS needed to correct the default language). `<html lang="ru">` is
+  the real starting state, not a JS-applied one.
+- English strings live in `js/i18n.js`'s `STRINGS.en` object, keyed to match
+  each translatable element's `data-i18n` (text), `data-i18n-alt` (image alt),
+  or `data-i18n-aria` (aria-label) attribute. On first run the script
+  snapshots the Russian original of every tagged element (`data-i18n-ru` etc.)
+  so switching back to Russian is a plain lookup — there's no duplicate
+  Russian copy inside `STRINGS`.
+- **Menu content is bilingual at the data level**: every `name` and
+  `description` in `js/menu-data.js` is `{ ru, en }`, not a plain string.
+  `js/main.js`'s `renderMenu(lang)` (exposed as `window.TYB_renderMenu`) picks
+  the active language — this is why the menu isn't wired through the
+  `data-i18n` attribute system like static copy is; it's rendered from data,
+  not present in the HTML to tag in the first place. When adding new dishes,
+  fill in both languages.
+- The toggle itself (`.lang-switch`, "RU / EN") lives in `.site-header__actions`
+  so it's reachable at every breakpoint without duplicating it into the mobile
+  drawer — that div already renders at all widths (only the Reserve/Order
+  Online buttons inside it hide below 1210px, moving to the drawer).
+- Preference persists via `localStorage` (`tomyumbar-lang`) and is re-applied
+  on load before the intro overlay finishes, so a returning English-preferring
+  visitor never sees a flash of Russian — the swap happens while the intro
+  still fully covers the screen.
+- `prefers-reduced-motion` users and no-JS visitors both get the Russian
+  default with no toggle logic running (`<noscript>` fallback mirrors what
+  the reduced-motion path already handles for the intro).
+
+**The bug that actually happened here, worth knowing about:** Russian text
+runs meaningfully longer than the English original — enough that two
+separate layout assumptions calibrated against English content broke under
+Russian: (1) the desktop-nav-vs-hamburger breakpoint (nav links no longer fit
+on one line at 1090px, needed pushing to 1210px — right at the container's
+own 1200px cap, so there's no headroom left over there without shrinking nav
+gaps too), and (2) the header logo + language switch + hamburger stopped
+fitting together below ~370px, made worse by a genuine pre-existing bug —
+`.menu-card`'s `1fr` grid column had no `minmax(0, 1fr)` / `min-width: 0`,
+so a long dish name or the wider "сум" currency label could force the whole
+card past its grid track instead of wrapping. Any time copy length changes
+(new language, longer real menu data, rebranding), re-check header wrapping
+and card overflow at narrow widths — don't assume layout math done against
+English holds for other content.
+
 ## Mobile
 
 Every change ships checked on mobile, not just verified there exists a media
@@ -212,12 +263,23 @@ query. Before calling anything done:
   confirm the overlay actually closes and the destination is visible (this
   broke once already: the nav stayed open over the scrolled content because
   nothing removed `.is-open` on link tap).
-- Check the tablet zone (~721–1090px), not just phone widths. The desktop
-  header nav (logo + 5 links + 2 CTAs) doesn't actually fit until ~1080px,
-  so anything narrower needs the hamburger — that gap wasn't obvious from
-  looking at 390px and 1440px alone and caused the nav to wrap onto two
-  lines for every tablet size in between. When adding anything to the header
-  row, re-check this range.
+- Check the tablet zone (~721–1210px), not just phone widths. The desktop
+  header nav (logo + 5 links + language switch + 2 CTAs) doesn't actually
+  fit until just past the container's 1200px cap, so anything narrower needs
+  the hamburger — that gap wasn't obvious from looking at 390px and 1440px
+  alone and caused the nav to wrap onto two lines for every tablet size in
+  between. When adding anything to the header row, or when copy length
+  changes (translations, real menu data), re-check this range.
+- Check the narrowest phones too (320–370px), not just 390px+. The header
+  logo + language switch + hamburger stopped fitting together below ~370px
+  — easy to miss if 390px (iPhone 12/13/14) is the only small width tested,
+  since it's already comfortably above that line.
+- Grid/flex children need explicit shrink room. `.menu-card`'s image+body
+  grid had no `minmax(0, 1fr)` on the text column, so a long dish name or a
+  wide price/currency label could force the card past its track width
+  instead of wrapping — invisible in English, appeared with Russian's
+  longer average word length. Any fixed-plus-flexible grid or flex row
+  needs `min-width: 0` on the flexible side to actually be flexible.
 - Interactive elements need a real tap target, not just a visible one — the
   hamburger icon's bars were 28×16px but its clickable box is padded out to
   44×44px (`.nav-toggle`) without changing how it looks. Apply the same
