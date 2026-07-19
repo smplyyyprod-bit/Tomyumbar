@@ -20,6 +20,9 @@
  *   weight,                    // { ru, en } — unit differs by language
  *   tags,                      // e.g. ["spicy"], ["vegetarian"], []
  *   image,                     // optional path; omitted = placeholder tile
+ *   nutrition,                  // optional { calories, protein, fat, carbs }
+ *                               // — plain numbers (kcal / grams), the modal
+ *                               // localizes the labels/units per language
  * }
  * ------------------------------------------------------------------
  */
@@ -46,6 +49,7 @@ const MENU_DATA = [
         price: "88,000",
         weight: { ru: "500 г", en: "500 g" },
         tags: [],
+        nutrition: { calories: 1037, protein: 54, fat: 49, carbs: 93 },
         image: "assets/images/dish-chef-cheese-ramen.jpg",
       },
       {
@@ -60,6 +64,7 @@ const MENU_DATA = [
         price: "60,000",
         weight: { ru: "730 г", en: "730 g" },
         tags: ["spicy"],
+        nutrition: { calories: 929, protein: 26, fat: 46, carbs: 101 },
         image: "assets/images/dish-chef-kuksi.jpg",
       },
       {
@@ -74,6 +79,7 @@ const MENU_DATA = [
         price: "80,000",
         weight: { ru: "200 г", en: "200 g" },
         tags: [],
+        nutrition: { calories: 388, protein: 15, fat: 28, carbs: 16 },
         image: "assets/images/dish-chef-oasis.jpg",
       },
       {
@@ -88,6 +94,7 @@ const MENU_DATA = [
         price: "268,000",
         weight: { ru: "220 г", en: "220 g" },
         tags: [],
+        nutrition: { calories: 547, protein: 25, fat: 39, carbs: 16 },
         image: "assets/images/dish-chef-tuna-tataki.jpg",
       },
       {
@@ -102,6 +109,7 @@ const MENU_DATA = [
         price: "128,000",
         weight: { ru: "330 г", en: "330 g" },
         tags: [],
+        nutrition: { calories: 544, protein: 25, fat: 39, carbs: 20 },
         image: "assets/images/dish-chef-thai-beef.jpg",
       },
       {
@@ -116,6 +124,7 @@ const MENU_DATA = [
         price: "87,000",
         weight: { ru: "465 г", en: "465 g" },
         tags: [],
+        nutrition: { calories: 599, protein: 24, fat: 34, carbs: 51 },
         image: "assets/images/dish-chef-wok-beef.jpg",
       },
       {
@@ -130,6 +139,7 @@ const MENU_DATA = [
         price: "117,000",
         weight: { ru: "490 г", en: "490 g" },
         tags: [],
+        nutrition: { calories: 1085, protein: 36, fat: 24, carbs: 179 },
         image: "assets/images/dish-chef-wok-shrimp.jpg",
       },
       {
@@ -144,6 +154,7 @@ const MENU_DATA = [
         price: "48,000",
         weight: { ru: "435 г", en: "435 g" },
         tags: [],
+        nutrition: { calories: 672, protein: 24, fat: 24, carbs: 85 },
         image: "assets/images/dish-chef-wok-chicken.jpg",
       },
       {
@@ -158,6 +169,7 @@ const MENU_DATA = [
         price: "109,000",
         weight: { ru: "430 г", en: "430 g" },
         tags: [],
+        nutrition: { calories: 783, protein: 33, fat: 27, carbs: 99 },
         image: "assets/images/dish-chef-wok-seafood.jpg",
       },
       {
@@ -172,6 +184,7 @@ const MENU_DATA = [
         price: "68,000",
         weight: { ru: "110 г / 10 г соус", en: "110 g / 10 g sauce" },
         tags: [],
+        nutrition: { calories: 358, protein: 11, fat: 29, carbs: 11 },
         image: "assets/images/dish-chef-harumaki-lamb.jpg",
       },
       {
@@ -186,6 +199,7 @@ const MENU_DATA = [
         price: "105,000",
         weight: { ru: "215 г", en: "215 g" },
         tags: [],
+        nutrition: { calories: 855, protein: 19, fat: 45, carbs: 90 },
         image: "assets/images/dish-chef-crispy-roll.jpg",
       },
       {
@@ -200,6 +214,7 @@ const MENU_DATA = [
         price: "30,000",
         weight: { ru: "50 г", en: "50 g" },
         tags: [],
+        nutrition: { calories: 75, protein: 4, fat: 1, carbs: 11 },
         image: "assets/images/dish-chef-sushi-salmon.jpg",
       },
       {
@@ -214,6 +229,7 @@ const MENU_DATA = [
         price: "32,000",
         weight: { ru: "60 г", en: "60 g" },
         tags: [],
+        nutrition: { calories: 97, protein: 4, fat: 2, carbs: 13 },
         image: "assets/images/dish-chef-sushi-eel.jpg",
       },
       {
@@ -228,6 +244,7 @@ const MENU_DATA = [
         price: "26,000",
         weight: { ru: "50 г", en: "50 g" },
         tags: [],
+        nutrition: { calories: 71, protein: 4, fat: 0, carbs: 12 },
         image: "assets/images/dish-chef-sushi-shrimp.jpg",
       },
       {
@@ -242,6 +259,7 @@ const MENU_DATA = [
         price: "58,000",
         weight: { ru: "50 г", en: "50 g" },
         tags: [],
+        nutrition: { calories: 88, protein: 6, fat: 1, carbs: 11 },
         image: "assets/images/dish-chef-sushi-tuna.jpg",
       },
       {
@@ -256,6 +274,7 @@ const MENU_DATA = [
         price: "65,000",
         weight: { ru: "190 г", en: "190 g" },
         tags: [],
+        nutrition: { calories: 346, protein: 7, fat: 23, carbs: 24 },
         image: "assets/images/dish-chef-matcha-cloud.jpg",
       },
       {
@@ -270,6 +289,7 @@ const MENU_DATA = [
         price: "75,000",
         weight: { ru: "195 г", en: "195 g" },
         tags: [],
+        nutrition: { calories: 581, protein: 11, fat: 35, carbs: 52 },
         image: "assets/images/dish-chef-dark-orange-chocolate.jpg",
       },
     ],

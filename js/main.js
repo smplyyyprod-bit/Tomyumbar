@@ -280,6 +280,8 @@ renderMenu("ru");
   const ingredientsEl = document.getElementById("dishModalIngredients");
   const allergensRow = document.getElementById("dishModalAllergensRow");
   const allergensEl = document.getElementById("dishModalAllergens");
+  const nutritionRow = document.getElementById("dishModalNutritionRow");
+  const nutritionEl = document.getElementById("dishModalNutrition");
   const relatedWrap = document.getElementById("dishModalRelated");
   const relatedRow = document.getElementById("dishModalRelatedRow");
 
@@ -318,6 +320,17 @@ renderMenu("ru");
       allergensEl.textContent = allergenText;
     } else {
       allergensRow.hidden = true;
+    }
+
+    if (item.nutrition) {
+      const n = item.nutrition;
+      nutritionRow.hidden = false;
+      nutritionEl.textContent =
+        lang === "en"
+          ? `${n.calories} kcal, ${n.protein}g protein, ${n.fat}g fat, ${n.carbs}g carbs`
+          : `Ккал: ${n.calories}, белки: ${n.protein} г., жиры: ${n.fat} г., углеводы: ${n.carbs} г.`;
+    } else {
+      nutritionRow.hidden = true;
     }
 
     // "You may also like": up to 3 other items from the same category.

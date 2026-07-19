@@ -75,6 +75,7 @@
 
       "modal.ingredients": "Ingredients",
       "modal.allergens": "Allergens",
+      "modal.nutrition": "Nutrition",
       "modal.related": "You may also like",
       "modal.close": "Close",
       "modal.viewDish": "View dish",
