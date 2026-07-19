@@ -61,7 +61,6 @@
     <nav class="primary-nav" id="primaryNav" data-i18n-aria="nav.primaryLabel" aria-label="Основная">
       <ul>
         <li><a href="#story" data-i18n="nav.story">Наша история</a></li>
-        <li><a href="#signatures" data-i18n="nav.signatures">Фирменные блюда</a></li>
         <li><a href="#menu" data-i18n="nav.menu">Меню</a></li>
         <li><a href="#gallery" data-i18n="nav.gallery">Галерея</a></li>
         <li><a href="#visit" data-i18n="nav.visit">Контакты</a></li>
@@ -120,15 +119,12 @@
   <!-- ============================================================
        2. BRAND STORY / PHILOSOPHY
        Purpose: editorial pause after the cinematic hero — establishes
-       the "why" before the "what." Split layout: real interior
-       photography paired with a short, confident statement.
+       the "why" before the "what." Centered copy block, no image —
+       a short, confident statement.
        Typography: serif display headline, generous line-height body.
        ============================================================ -->
   <section class="story" id="story">
     <div class="container story__grid">
-      <div class="story__image">
-        <img data-i18n-alt="story.imgAlt" src="assets/images/storefront-01.jpg" alt="Вывеска и вход TomYumBar">
-      </div>
       <div class="story__copy">
         <p class="eyebrow" data-i18n="story.eyebrow">Наша история</p>
         <h2 data-i18n="story.heading">Там, где паназиатские традиции встречают современное мастерство</h2>
@@ -148,54 +144,7 @@
   </section>
 
   <!-- ============================================================
-       3. SIGNATURE DISHES
-       Purpose: appetite-building teaser before the full menu —
-       3-4 hero dishes shown large, image-led, with minimal copy.
-       Not the full menu; a curated "best of" moment.
-       ============================================================ -->
-  <section class="signatures" id="signatures">
-    <div class="container">
-      <div class="section-heading">
-        <p class="eyebrow" data-i18n="signatures.eyebrow">Выбор шефа</p>
-        <h2 data-i18n="signatures.heading">Фирменные блюда</h2>
-      </div>
-    </div>
-
-    <div class="signatures__row">
-      <article class="signature-card signature-card--wide">
-        <div class="signature-card__media">
-          <img data-i18n-alt="signatures.imgAlt" src="assets/images/dish-sushi-platter.jpg" alt="Тарелка нигири с васаби, имбирём и соевым соусом">
-        </div>
-        <div class="signature-card__caption">
-          <h3 data-i18n="signatures.dish1.name">Ассорти нигири</h3>
-          <p data-i18n="signatures.dish1.desc">Лосось, тунец, тигровая креветка и обжаренный угорь — формуются вручную под заказ.</p>
-        </div>
-      </article>
-
-      <article class="signature-card">
-        <div class="signature-card__media signature-card__media--placeholder">
-          <span data-i18n="signatures.placeholder">Фото блюда</span>
-        </div>
-        <div class="signature-card__caption">
-          <h3 data-i18n="signatures.dish2.name">Том Ям Кунг</h3>
-          <p data-i18n="signatures.dish2.desc">Фирменная классика — речная креветка, лемонграсс, чили-масло.</p>
-        </div>
-      </article>
-
-      <article class="signature-card">
-        <div class="signature-card__media signature-card__media--placeholder">
-          <span data-i18n="signatures.placeholder">Фото блюда</span>
-        </div>
-        <div class="signature-card__caption">
-          <h3 data-i18n="signatures.dish3.name">Вагю с чёрным перцем</h3>
-          <p data-i18n="signatures.dish3.desc">Обжаренное на воке вагю, зелёный лук, жареный чеснок.</p>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       4. FULL MENU
+       3. FULL MENU
        Purpose: the functional core of the page — the complete,
        browsable menu. Sticky category navigation + dish cards.
        Content is rendered from js/menu-data.js so the placeholder
@@ -246,7 +195,7 @@
   </section>
 
   <!-- ============================================================
-       5. GALLERY / AMBIENCE
+       4. GALLERY / AMBIENCE
        Purpose: ground the brand in the physical room — texture,
        light, materials. Full-bleed image sequence, no copy needed.
        ============================================================ -->
@@ -271,40 +220,61 @@
   </section>
 
   <!-- ============================================================
-       6. VISIT / RESERVE
+       5. VISIT / RESERVE
        Purpose: conversion section — location, hours, contact,
        reservation + delivery CTAs. Kept plain and functional.
        ============================================================ -->
   <section class="visit" id="visit">
-    <div class="container visit__grid">
-      <div class="visit__info">
+    <div class="container">
+      <div class="section-heading">
         <p class="eyebrow" data-i18n="visit.eyebrow">Приходите к нам</p>
-        <h2 data-i18n="visit.heading">Забронируйте столик</h2>
+        <h2 data-i18n="visit.heading">Наши локации</h2>
+      </div>
+    </div>
 
+    <div class="container visit__locations">
+      <div class="visit__location">
+        <h3 data-i18n="visit.location1.city">Ташкент</h3>
         <dl class="visit__details">
           <div>
             <dt data-i18n="visit.locationLabel">Адрес</dt>
-            <dd data-i18n="visit.locationValue">Ташкент, Узбекистан</dd>
+            <dd data-i18n="visit.location1.address">Тараса Шевченко, 21а</dd>
+          </div>
+          <div>
+            <dt data-i18n="visit.phoneLabel">Телефон</dt>
+            <dd><a href="tel:+998947877777" data-i18n="visit.location1.phone">+998 94 787 77 77</a></dd>
           </div>
           <div>
             <dt data-i18n="visit.hoursLabel">Часы работы</dt>
-            <dd data-i18n="visit.hoursValue">Ежедневно · 10:00 — 23:00</dd>
-          </div>
-          <div>
-            <dt data-i18n="visit.contactLabel">Контакты</dt>
-            <dd>+998 xx xxx xx xx</dd>
+            <dd data-i18n="visit.location1.hoursWeekday">Вс–чт: 11:00 – 00:00</dd>
+            <dd data-i18n="visit.location1.hoursWeekend">Пт–сб: 11:00 – 01:00</dd>
           </div>
         </dl>
-
-        <div class="visit__actions">
-          <a href="#" class="btn btn--solid btn--lg" data-i18n="visit.ctaReserve">Забронировать столик</a>
-          <a href="#menu" class="btn btn--outline btn--lg" data-i18n="visit.ctaOrder">Заказать онлайн</a>
-        </div>
       </div>
 
-      <div class="visit__map-placeholder" aria-hidden="true">
-        <span data-i18n="visit.mapPlaceholder">Здесь будет карта</span>
+      <div class="visit__location">
+        <h3 data-i18n="visit.location2.city">Ташкент</h3>
+        <dl class="visit__details">
+          <div>
+            <dt data-i18n="visit.locationLabel">Адрес</dt>
+            <dd data-i18n="visit.location2.address">ул. Кичик Бешагач, д. 124/1</dd>
+          </div>
+          <div>
+            <dt data-i18n="visit.phoneLabel">Телефон</dt>
+            <dd><a href="tel:+998948478777" data-i18n="visit.location2.phone">+998 94 847 87 77</a></dd>
+          </div>
+          <div>
+            <dt data-i18n="visit.hoursLabel">Часы работы</dt>
+            <dd data-i18n="visit.location2.hoursWeekday">Вс–чт: 11:00 – 00:00</dd>
+            <dd data-i18n="visit.location2.hoursWeekend">Пт–сб: 11:00 – 01:00</dd>
+          </div>
+        </dl>
       </div>
+    </div>
+
+    <div class="container visit__actions">
+      <a href="#" class="btn btn--solid btn--lg" data-i18n="visit.ctaReserve">Забронировать столик</a>
+      <a href="#menu" class="btn btn--outline btn--lg" data-i18n="visit.ctaOrder">Заказать онлайн</a>
     </div>
   </section>
 
@@ -326,7 +296,6 @@
       <p class="site-footer__heading" data-i18n="footer.exploreHeading">Разделы</p>
       <ul>
         <li><a href="#story" data-i18n="nav.story">Наша история</a></li>
-        <li><a href="#signatures" data-i18n="nav.signatures">Фирменные блюда</a></li>
         <li><a href="#menu" data-i18n="nav.menu">Меню</a></li>
         <li><a href="#gallery" data-i18n="nav.gallery">Галерея</a></li>
       </ul>
