@@ -40,6 +40,7 @@
       "hero.subtitle": "Fire, smoke and citrus — the flavors of Asia,<br>plated for the modern table.",
       "hero.ctaMenu": "View Full Menu",
       "hero.ctaReserve": "Reserve a Table",
+      "hero.ctaOrder": "Order Online",
       "hero.scrollCue": "Scroll",
       "hero.scrollAria": "Scroll to next section",
 
