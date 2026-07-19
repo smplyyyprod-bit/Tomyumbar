@@ -41,7 +41,14 @@
 <noscript>
   <style>
     .intro-overlay { display: none !important; }
-    .hero { opacity: 1 !important; }
+    .hero,
+    .hero__content > *,
+    .site-header .wordmark,
+    .primary-nav,
+    .site-header__actions {
+      opacity: 1 !important;
+      transform: none !important;
+    }
   </style>
 </noscript>
 
@@ -102,6 +109,7 @@
     </div>
 
     <div class="hero__scrim"></div>
+    <div class="hero__fade" aria-hidden="true"></div>
 
     <div class="hero__content container">
       <p class="eyebrow eyebrow--light" data-i18n="hero.eyebrow">Ташкент · с 2016 года</p>

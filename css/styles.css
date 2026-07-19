@@ -1,7 +1,8 @@
 /* ==========================================================================
-   TomYumBar — Round 1 stylesheet
-   Structure & layout only: no transitions, no keyframe animation,
-   no scroll effects. Hover states are instant color/border swaps.
+   TomYumBar stylesheet
+   Motion is plain CSS (transitions/keyframes) — no bundler exists yet
+   to pull in the Motion library, see CLAUDE.md. Reveals fire once via
+   class toggles from js/intro.js; prefers-reduced-motion always wins.
    ========================================================================== */
 
 /* ---- Design tokens ------------------------------------------------------ */
@@ -115,28 +116,80 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
+  padding: 0.85rem 1.75rem;
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  border-radius: 2px;
+  border-radius: 14px;
   border: 1px solid transparent;
   white-space: nowrap;
+  cursor: pointer;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease,
+    background-color 280ms ease, border-color 280ms ease, color 280ms ease;
 }
 
-.btn--lg { padding: 1rem 2rem; font-size: 0.95rem; }
+.btn--lg { padding: 1.15rem 2.25rem; font-size: 0.95rem; border-radius: 16px; }
 
-.btn--solid { background: var(--color-maroon); color: var(--color-cream); }
-.btn--solid:hover { background: var(--color-maroon-dark); }
+.btn--solid {
+  background: var(--color-maroon);
+  color: var(--color-cream);
+  box-shadow: 0 4px 14px rgba(122, 21, 34, 0.32);
+}
+.btn--solid:hover {
+  background: var(--color-maroon-dark);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 28px rgba(122, 21, 34, 0.4);
+}
+.btn--solid:active { transform: translateY(-1px) scale(0.98); box-shadow: 0 6px 14px rgba(122, 21, 34, 0.3); }
 
-.btn--ghost { color: var(--color-ink); border-color: var(--color-line); }
-.btn--ghost:hover { border-color: var(--color-ink); }
+.btn--ghost {
+  color: var(--color-ink);
+  border-color: var(--color-line);
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.btn--ghost:hover {
+  border-color: var(--color-ink);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 22px rgba(27, 21, 18, 0.12);
+}
+.btn--ghost:active { transform: translateY(-1px) scale(0.98); box-shadow: 0 4px 10px rgba(27, 21, 18, 0.1); }
 
-.btn--outline { color: var(--color-ink); border-color: var(--color-ink); }
-.btn--outline:hover { background: var(--color-ink); color: var(--color-cream); }
+.btn--outline {
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.btn--outline:hover {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 26px rgba(27, 21, 18, 0.22);
+}
+.btn--outline:active { transform: translateY(-1px) scale(0.98); box-shadow: 0 6px 14px rgba(27, 21, 18, 0.16); }
 
-.btn--outline-light { color: var(--color-cream); border-color: var(--color-line-light); }
-.btn--outline-light:hover { background: var(--color-cream); color: var(--color-ink); }
+.btn--outline-light {
+  color: var(--color-cream);
+  border-color: var(--color-line-light);
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+}
+.btn--outline-light:hover {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-ink);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+}
+.btn--outline-light:active { transform: translateY(-1px) scale(0.98); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease; }
+  .btn:hover, .btn:active { transform: none; }
+}
 
 /* ==========================================================================
    INTRO OVERLAY
@@ -243,8 +296,12 @@ html.intro-active {
   gap: var(--space-sm);
 }
 
-.site-header--solid .btn--ghost { color: var(--color-ink); }
-.site-header:not(.site-header--solid) .btn--ghost { color: var(--color-cream); border-color: var(--color-line-light); }
+.site-header--solid .btn--ghost { color: var(--color-ink); background: rgba(27, 21, 18, 0.05); }
+.site-header:not(.site-header--solid) .btn--ghost {
+  color: var(--color-cream);
+  border-color: var(--color-line-light);
+  background: rgba(255, 255, 255, 0.08);
+}
 
 .lang-switch {
   display: flex;
@@ -305,6 +362,7 @@ html.intro-active {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-block: calc(var(--header-height) + env(safe-area-inset-top, 0px)) var(--space-lg);
   overflow: hidden;
   background: var(--color-ink);
   opacity: 0;
@@ -354,11 +412,26 @@ html.intro-active {
   background: linear-gradient(180deg, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.72) 100%);
 }
 
+/* Soft hand-off into the next section's paper background instead of a
+   hard cutoff — sits above the scrim, below the text. */
+.hero__fade {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: clamp(100px, 16vh, 200px);
+  background: linear-gradient(180deg, transparent 0%, var(--color-paper) 92%);
+  z-index: 1;
+  pointer-events: none;
+}
+
 .hero__content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
   color: var(--color-cream);
+  /* Pulls the block down from dead-center for a less top-heavy, more
+     intentional balance — roughly 10-15% of the viewport height. */
+  margin-top: clamp(2rem, 12vh, 7rem);
 }
 
 .hero__title {
@@ -378,7 +451,7 @@ html.intro-active {
 }
 
 .hero__actions {
-  margin-top: var(--space-lg);
+  margin-top: var(--space-xl);
   display: flex;
   gap: var(--space-sm);
   justify-content: center;
@@ -387,22 +460,76 @@ html.intro-active {
 
 .hero__scroll-cue {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   align-self: center;
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-lg);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-md);
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-cream);
   opacity: 0.65;
+  transition: opacity 250ms ease;
+  animation: heroScrollCueBounce 2.4s ease-in-out infinite;
+}
+
+.hero__scroll-cue:hover { opacity: 1; }
+
+@keyframes heroScrollCueBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ---- Entrance reveal ---------------------------------------------------
+   Fires once, triggered by js/intro.js adding .is-visible to #hero and
+   .hero-revealed to <html> at the same moment the intro hands off (or
+   immediately, for reduced-motion / no-video visitors — see that file).
+   -------------------------------------------------------------------- */
+.hero__content > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms ease-out, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero.is-visible .hero__content > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero.is-visible .hero__content > *:nth-child(1) { transition-delay: 120ms; }
+.hero.is-visible .hero__content > *:nth-child(2) { transition-delay: 240ms; }
+.hero.is-visible .hero__content > *:nth-child(3) { transition-delay: 360ms; }
+.hero.is-visible .hero__content > *:nth-child(4) { transition-delay: 480ms; }
+
+.site-header .wordmark,
+.primary-nav,
+.site-header__actions {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 600ms ease-out, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.hero-revealed .site-header .wordmark { opacity: 1; transform: translateY(0); transition-delay: 80ms; }
+html.hero-revealed .primary-nav { opacity: 1; transform: translateY(0); transition-delay: 620ms; }
+html.hero-revealed .site-header__actions { opacity: 1; transform: translateY(0); transition-delay: 680ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__content > *,
+  .site-header .wordmark,
+  .primary-nav,
+  .site-header__actions {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero__scroll-cue { animation: none; }
 }
 
 /* ==========================================================================
    BRAND STORY
    ========================================================================== */
 .story {
-  padding-block: var(--space-2xl);
+  padding-block: var(--space-xl) var(--space-2xl);
   background: var(--color-paper);
 }
 

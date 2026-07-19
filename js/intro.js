@@ -24,6 +24,7 @@
   if (prefersReducedMotion || !heroVideo) {
     overlay.remove();
     hero.classList.add("is-visible");
+    document.documentElement.classList.add("hero-revealed");
     return;
   }
 
@@ -47,6 +48,7 @@
 
     overlay.classList.add("is-fading");
     hero.classList.add("is-visible");
+    document.documentElement.classList.add("hero-revealed");
 
     window.setTimeout(() => {
       introVideo.pause();
