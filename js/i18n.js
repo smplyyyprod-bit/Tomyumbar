@@ -3,16 +3,18 @@
  * ------------------------------------------------------------------
  * The HTML is authored in Russian by default (no flash of the wrong
  * language on load). This file holds the English strings and swaps
- * every [data-i18n] / [data-i18n-alt] / [data-i18n-aria] element's
- * content when the user picks English — plus re-renders the menu
- * (js/main.js) with the chosen language, since that's built from
- * js/menu-data.js rather than static HTML.
+ * every [data-i18n] / [data-i18n-alt] / [data-i18n-aria] /
+ * [data-i18n-placeholder] element's content when the user picks
+ * English — plus re-renders the menu (js/main.js) with the chosen
+ * language, since that's built from js/menu-data.js rather than
+ * static HTML.
  *
  * Add new copy in three places: the Russian text in index.html itself,
  * the matching key here under STRINGS.en, and a data-i18n attribute
- * (or data-i18n-alt / data-i18n-aria) on the element pointing at that
- * key — same key is used to read the Russian original back out of a
- * data-i18n-ru attribute this script stamps on first run.
+ * (or data-i18n-alt / data-i18n-aria / data-i18n-placeholder) on the
+ * element pointing at that key — same key is used to read the Russian
+ * original back out of a data-i18n-ru attribute this script stamps on
+ * first run.
  * ------------------------------------------------------------------
  */
 
@@ -66,6 +68,16 @@
       "menu.categoriesAria": "Menu categories",
       "menu.imagePlaceholder": "Image",
       "menu.currency": "UZS",
+      "menu.searchPlaceholder": "Search the menu…",
+      "menu.searchClear": "Clear search",
+      "menu.searchNoResults": "No dishes match “{query}”.",
+      "menu.searchResultsCount": "{count} dishes found",
+
+      "modal.ingredients": "Ingredients",
+      "modal.allergens": "Allergens",
+      "modal.related": "You may also like",
+      "modal.close": "Close",
+      "modal.viewDish": "View dish",
 
       "gallery.eyebrow": "The Room",
       "gallery.heading": "An Atmosphere Worth Staying For",
@@ -124,6 +136,9 @@
     document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
       el.setAttribute("data-i18n-aria-ru", el.getAttribute("aria-label") || "");
     });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      el.setAttribute("data-i18n-placeholder-ru", el.getAttribute("placeholder") || "");
+    });
   }
 
   function applyLang(lang) {
@@ -140,6 +155,10 @@
     document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
       const key = el.getAttribute("data-i18n-aria");
       el.setAttribute("aria-label", dict ? dict[key] ?? el.getAttribute("data-i18n-aria-ru") : el.getAttribute("data-i18n-aria-ru"));
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      el.setAttribute("placeholder", dict ? dict[key] ?? el.getAttribute("data-i18n-placeholder-ru") : el.getAttribute("data-i18n-placeholder-ru"));
     });
 
     document.documentElement.lang = lang;

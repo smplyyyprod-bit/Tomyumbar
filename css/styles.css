@@ -495,14 +495,70 @@ html.intro-active {
   background: var(--color-paper);
   border-block: 1px solid var(--color-line);
   margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
 }
+
+.menu-toolbar {
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-xs);
+}
+
+.menu-search {
+  position: relative;
+  max-width: 420px;
+}
+
+.menu-search__icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 17px;
+  color: var(--color-ink-soft);
+  pointer-events: none;
+}
+
+.menu-search__input {
+  width: 100%;
+  padding: 0.7rem 2.5rem 0.7rem 2.65rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-cream);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  transition: border-color 200ms ease;
+}
+
+.menu-search__input::placeholder { color: var(--color-ink-soft); opacity: 0.75; }
+.menu-search__input:focus { outline: none; border-color: var(--color-maroon); }
+.menu-search__input::-webkit-search-cancel-button { display: none; }
+
+.menu-search__clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--color-ink-soft);
+}
+
+.menu-search__clear:hover { color: var(--color-maroon); }
 
 .menu-nav-wrap::before,
 .menu-nav-wrap::after {
   content: "";
   position: absolute;
-  top: 0;
   bottom: 0;
+  height: calc(var(--space-sm) + 44px);
   width: 28px;
   pointer-events: none;
   z-index: 1;
@@ -536,19 +592,38 @@ html.intro-active {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-ink-soft);
+  background: transparent;
   border: 1px solid var(--color-line);
   border-radius: 999px;
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
 }
 
 .menu-nav__chip:hover { color: var(--color-maroon); border-color: var(--color-maroon); }
 
+.menu-nav__chip.is-active {
+  color: var(--color-cream);
+  background: var(--color-maroon);
+  border-color: var(--color-maroon);
+}
+
+.menu-search-status {
+  padding-block: var(--space-xl);
+  text-align: center;
+  color: var(--color-ink-soft);
+  font-style: italic;
+}
+
 .menu-category {
   padding-top: var(--space-lg);
-  scroll-margin-top: calc(var(--header-height) + 64px);
+  /* html's scroll-padding-top already clears the fixed header; this only
+     needs to clear the sticky sub-nav on top of that — kept in sync with
+     its real measured height via --menu-nav-height (js/main.js). */
+  scroll-margin-top: var(--menu-nav-height, 172px);
   border-top: 1px solid var(--color-line);
 }
 
 .menu-category:first-child { border-top: none; padding-top: 0; }
+.menu-category.is-hidden { display: none; }
 
 .menu-category__title {
   margin-bottom: var(--space-md);
@@ -561,41 +636,111 @@ html.intro-active {
   margin-bottom: var(--space-xl);
 }
 
+/* Card density increases with available space — deliberately min-width
+   here, unlike the rest of this file's max-width breakpoint system,
+   since the grid gets MORE columns as the viewport grows. */
+@media (min-width: 720px) {
+  .menu-card-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1100px) {
+  .menu-card-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
 .menu-card {
-  display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  gap: var(--space-sm);
-  padding-bottom: var(--space-md);
-  border-bottom: 1px solid var(--color-line);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-cream);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(27, 21, 18, 0.08);
+  cursor: pointer;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms ease;
+}
+
+.menu-card.is-hidden { display: none; }
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 34px rgba(27, 21, 18, 0.14);
+}
+
+.menu-card:active { transform: translateY(-1px) scale(0.98); }
+
+.menu-card:focus-visible {
+  outline: 2px solid var(--color-maroon);
+  outline-offset: 2px;
 }
 
 .menu-card__media {
-  width: 96px;
-  height: 96px;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--color-cream-alt);
 }
 
-.menu-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.menu-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 450ms ease;
+}
+
+.menu-card:hover .menu-card__media img { transform: scale(1.07); }
 
 .menu-card__media--placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--color-ink-soft);
-  border: 1px dashed var(--color-line);
+  opacity: 0.6;
+  background:
+    repeating-linear-gradient(135deg, rgba(27,21,18,0.035) 0 2px, transparent 2px 14px),
+    var(--color-cream-alt);
+}
+
+.menu-card__badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 4px;
+}
+
+.menu-card__badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 253, 249, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 6px rgba(27, 21, 18, 0.18);
+}
+
+.menu-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+  padding: var(--space-sm) var(--space-sm) var(--space-md);
 }
 
 .menu-card__row {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-sm);
+  align-items: flex-start;
+  gap: var(--space-xs);
 }
 
 .menu-card__name {
-  font-size: 1.05rem;
+  font-size: 1rem;
+  line-height: 1.3;
   min-width: 0;
 }
 
@@ -603,21 +748,253 @@ html.intro-active {
   flex: 0 0 auto;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--color-maroon);
   white-space: nowrap;
 }
 
 .menu-card__currency {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: var(--color-ink-soft);
 }
 
 .menu-card__desc {
-  margin-top: 0.35rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
   color: var(--color-ink-soft);
+  flex: 1;
+}
+
+.menu-card__weight {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-soft);
+  opacity: 0.75;
+}
+
+/* Below the 3-column breakpoint, cards are narrow enough that a long dish
+   name sharing a row with the price collapses the name column to a few
+   px — min-width: 0 lets it shrink, but Cyrillic dish names still don't
+   have anywhere to break, so the text overflows straight across the price
+   instead of wrapping. Stack them instead of squeezing them side by side. */
+@media (max-width: 719px) {
+  .menu-card__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-card,
+  .menu-card__media img,
+  .menu-nav__chip {
+    transition: none;
+  }
+  .menu-card:hover { transform: none; }
+}
+
+/* ==========================================================================
+   DISH DETAIL MODAL
+   ========================================================================== */
+html.modal-open { overflow: hidden; }
+
+.dish-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.dish-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dish-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(27, 21, 18, 0.62);
+}
+
+.dish-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--color-paper);
+  border-radius: 20px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+  transform: translateY(20px) scale(0.97);
+  opacity: 0;
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms ease;
+}
+
+.dish-modal.is-open .dish-modal__dialog {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.dish-modal__close {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 253, 249, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.dish-modal__close svg { width: 15px; height: 15px; }
+.dish-modal__close:hover { background: var(--color-cream); }
+
+.dish-modal__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--color-cream-alt);
+  overflow: hidden;
+}
+
+.dish-modal__media img { width: 100%; height: 100%; object-fit: cover; }
+
+.dish-modal__tags {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+}
+
+.dish-modal__tag {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 253, 249, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.dish-modal__body {
+  padding: var(--space-lg);
+}
+
+.dish-modal__title { margin-bottom: var(--space-xs); }
+
+.dish-modal__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.dish-modal__price {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-maroon);
+}
+
+.dish-modal__weight {
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+}
+
+.dish-modal__desc {
+  color: var(--color-ink-soft);
+  line-height: 1.65;
+  margin-bottom: var(--space-md);
+}
+
+.dish-modal__facts {
+  display: grid;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-line);
+}
+
+.dish-modal__facts dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.2rem;
+}
+
+.dish-modal__facts dd { font-size: 0.9rem; }
+
+.dish-modal__related-heading {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.dish-modal__related-row {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.dish-modal__related-item {
+  flex: 0 0 auto;
+  width: 116px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: left;
+}
+
+.dish-modal__related-thumb,
+.dish-modal__related-thumb--placeholder {
+  display: block;
+  width: 116px;
+  height: 88px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--color-cream-alt);
+}
+
+.dish-modal__related-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.dish-modal__related-name { font-size: 0.8rem; font-weight: 600; line-height: 1.3; }
+.dish-modal__related-price { font-size: 0.75rem; font-weight: 700; color: var(--color-maroon); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dish-modal,
+  .dish-modal__dialog {
+    transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .dish-modal { padding: 0; align-items: flex-end; }
+  .dish-modal__dialog {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+  }
+  .dish-modal__body { padding: var(--space-md); }
 }
 
 /* ==========================================================================
@@ -809,8 +1186,6 @@ html.intro-active {
   .hero__actions { flex-direction: column; width: 100%; }
   .hero__actions .btn { width: 100%; }
 
-  .menu-card-grid { grid-template-columns: 1fr; }
-
   .gallery__grid {
     grid-template-columns: 1fr;
     grid-auto-rows: 260px;
@@ -830,4 +1205,10 @@ html.intro-active {
   .wordmark img { height: 26px; }
   .lang-switch { gap: 0.3em; font-size: 0.7rem; }
   .site-header__actions { gap: 0.6rem; }
+  /* At the narrowest real phones (320px) the row's desktop gap (meant to
+     space three items — logo, nav links, actions) still overflows past the
+     viewport even with the shrinks above, since only two items remain once
+     primary-nav is hidden. The hamburger's negative-margin tap target was
+     the part that actually poked off-screen. */
+  .site-header__row { gap: var(--space-sm); }
 }

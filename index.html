@@ -215,12 +215,30 @@
     </div>
 
     <div class="menu-nav-wrap" id="menuNavWrap">
+      <div class="container menu-toolbar">
+        <div class="menu-search">
+          <svg class="menu-search__icon" viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="8.5" cy="8.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
+            <line x1="13.3" y1="13.3" x2="18" y2="18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></line>
+          </svg>
+          <input
+            type="search"
+            id="menuSearch"
+            class="menu-search__input"
+            data-i18n-placeholder="menu.searchPlaceholder"
+            placeholder="Найти блюдо в меню…"
+            autocomplete="off"
+          >
+          <button type="button" class="menu-search__clear" id="menuSearchClear" data-i18n-aria="menu.searchClear" aria-label="Очистить поиск" hidden>&times;</button>
+        </div>
+      </div>
       <nav class="menu-nav container" id="menuNav" data-i18n-aria="menu.categoriesAria" aria-label="Категории меню">
         <!-- category chips injected by js/main.js from menu-data.js -->
       </nav>
     </div>
 
     <div class="container">
+      <p class="menu-search-status" id="menuSearchStatus" hidden></p>
       <div class="menu-categories" id="menuCategories">
         <!-- category sections + dish cards injected by js/main.js -->
       </div>
@@ -337,6 +355,51 @@
     <p data-i18n="footer.copyright">© 2026 TomYumBar. Все права защищены.</p>
   </div>
 </footer>
+
+<!-- ============================================================
+     DISH DETAIL MODAL
+     Purpose: premium quick-look for a single dish — hero image,
+     full description, ingredients, allergens, related dishes.
+     Populated entirely by js/main.js on card click; markup here
+     is just the empty shell. Closes on backdrop click, close
+     button, or Escape.
+     ============================================================ -->
+<div class="dish-modal" id="dishModal" aria-hidden="true">
+  <div class="dish-modal__backdrop" id="dishModalBackdrop"></div>
+  <div class="dish-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="dishModalTitle" id="dishModalDialog" tabindex="-1">
+    <button type="button" class="dish-modal__close" id="dishModalClose" data-i18n-aria="modal.close" aria-label="Закрыть">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></line><line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></line></svg>
+    </button>
+    <div class="dish-modal__media">
+      <img id="dishModalImage" src="" alt="">
+      <div class="dish-modal__tags" id="dishModalTags"></div>
+    </div>
+    <div class="dish-modal__body">
+      <h3 id="dishModalTitle" class="dish-modal__title"></h3>
+      <div class="dish-modal__meta">
+        <span class="dish-modal__price" id="dishModalPrice"></span>
+        <span class="dish-modal__weight" id="dishModalWeight"></span>
+      </div>
+      <p class="dish-modal__desc" id="dishModalDesc"></p>
+
+      <dl class="dish-modal__facts">
+        <div>
+          <dt data-i18n="modal.ingredients">Состав</dt>
+          <dd id="dishModalIngredients"></dd>
+        </div>
+        <div id="dishModalAllergensRow">
+          <dt data-i18n="modal.allergens">Аллергены</dt>
+          <dd id="dishModalAllergens"></dd>
+        </div>
+      </dl>
+
+      <div class="dish-modal__related" id="dishModalRelated" hidden>
+        <p class="dish-modal__related-heading" data-i18n="modal.related">Вам может понравиться</p>
+        <div class="dish-modal__related-row" id="dishModalRelatedRow"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="js/menu-data.js"></script>
 <script src="js/main.js"></script>

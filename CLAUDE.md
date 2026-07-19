@@ -197,12 +197,46 @@ it.
 
 - All content comes from `js/menu-data.js` — never hand-edit dish cards in
   `index.html`, they're rendered by `js/main.js`.
-- Category nav is a sticky pill-row of anchor links; dish cards show image
-  (or placeholder), name, description, price. Keep prices in UZS (som),
-  formatted with thousands separators, matching how TomYumBar's own ordering
-  site prices dishes.
+- **28 categories, fixed order**, per the client's requirement — never
+  reorder/resort them: Меню от шефа, Детское меню, Закуски, Горячие блюда,
+  Сашими, Салаты, Тартар, Супы, Карри, Wok, Сборный Wok, Сеты, Роллы,
+  Добавки, Десерты, Моти, Чай, Кофе, Молочные коктейли, Соки и вода,
+  Лимонад, Тамаринд, Фреш, Смузи, Алкогольные коктейли, Вино, Покрепче,
+  Пиво.
+- Each item in `menu-data.js` is `{ name, description, fullDescription,
+  ingredients, allergens, price, weight, tags, image? }` — `name`,
+  `description`, `fullDescription`, `ingredients` are all `{ ru, en }`;
+  `allergens` is `{ ru, en }` or the literal string `"—"` when there are
+  none (the modal hides the allergens row entirely for that case rather
+  than showing an empty one). `tags` is an array like `["spicy"]` /
+  `["vegetarian"]`, rendered via `DIETARY_ICONS` (🌶️ / 🌱) as badges on the
+  card. `weight` is `{ ru, en }` since the unit differs ("180 г" / "180 g").
+  Keep prices in UZS (som), formatted with thousands separators, matching
+  how TomYumBar's own ordering site prices dishes.
+- Cards are image-top with rounded corners, hover lift + image zoom on
+  desktop (`.menu-card:hover`), scale-down on `:active` for a tap-press
+  feel on mobile — all disabled under `prefers-reduced-motion`.
+- A search bar (`#menuSearch`) filters cards by name/description in the
+  active language, hiding categories with zero matches and showing a
+  localized "no results" message (`js/main.js`'s `menuSearch` IIFE).
+- The category nav (`#menuNav`) is a sticky, horizontally-scrollable pill
+  row. Clicking a pill smooth-scrolls to that category; an
+  `IntersectionObserver` highlights whichever category chip is currently
+  in view as the page is scrolled manually (`menuCategoryNav` IIFE) — see
+  the Mobile section below for a real bug this produced.
+- Clicking (or Enter/Space on) a card opens `#dishModal`: hero image, full
+  description, ingredients, allergens (if any), price, weight, and up to
+  3 "You may also like" items from the same category. Closes via the ✕
+  button, backdrop click, or Escape; traps focus on the close button while
+  open and restores it to whatever was focused before opening. On screens
+  ≤480px it renders as a bottom sheet instead of a centered dialog.
 - Don't summarize or drop menu items — the full, current menu must always be
   present, per the client's explicit requirement.
+- `menu.tomyumbar.com` (the live ordering site meant to be the real content
+  source) is network-blocked from this dev environment, so `menu-data.js`
+  currently holds realistic bilingual placeholder dishes across all 28
+  categories, not the real menu — swap it for real data (same schema) once
+  it's reachable or supplied directly.
 
 ## Language
 
@@ -286,6 +320,39 @@ query. Before calling anything done:
   padding+negative-margin pattern to any other small icon-only control.
 - Confirm no horizontal scroll at 320–430px (`document.documentElement
   .scrollWidth` should equal `clientWidth`).
+- A flex row that puts a fixed-width sibling (price) next to a shrinkable
+  one (dish name) needs more than `min-width: 0` once the row itself gets
+  narrow enough — `min-width: 0` lets the name's column shrink toward zero,
+  but Cyrillic text still has nowhere to *break* mid-word, so it overflows
+  straight across the price instead of wrapping (this actually happened:
+  `.menu-card__name` collapsed to ~3px wide at 320px and the dish name
+  rendered on top of the price). Below the 2-column card breakpoint
+  (`max-width: 719px`), `.menu-card__row` stacks name/price vertically
+  instead of trying to fit both on one line — don't re-introduce a
+  side-by-side row there without re-testing at 320px specifically, not
+  just 375/390px, where a shorter first word can accidentally still fit.
+- A sticky/scroll-triggered highlight (like the menu category nav's active
+  chip) has to use the *same* offset the page actually scrolls to, or they
+  drift apart. This happened: `.menu-category`'s `scroll-margin-top` used a
+  guessed constant for the sticky sub-nav's height while the
+  `IntersectionObserver` watching for the active category used the real
+  measured `navWrap.offsetHeight` — close but not equal, so a clicked
+  category would land just outside the observer's detection band and the
+  *previous* chip stayed highlighted. Fixed by deriving both the CSS
+  scroll offset (`--menu-nav-height`, set from JS) and the observer's
+  trigger line from the same measured nav height, recomputed on resize —
+  any future scroll-spy code should share one source of truth for "how far
+  down does content land" rather than keeping a CSS guess and a JS
+  measurement in sync by hand.
+- A flex row's `gap` sized for a wider desktop layout doesn't shrink itself
+  just because a media query hides one of the items sharing it. The header
+  row's `gap` (28px, sized for logo + nav-links + actions on desktop) was
+  never reduced for mobile, and even after the logo and language-switch
+  were already shrunk for narrow phones, that leftover 28px gap was still
+  enough to push the hamburger's tap target 3px past the viewport edge at
+  exactly 320px — invisible at 375px+ where there was still slack. Anything
+  that changes what fills a flex row on mobile should double check the
+  row's own `gap` at 320px, not just the items inside it.
 - When something scrolls horizontally on purpose (menu category pills), it
   needs a visual hint that it does — the edge fade on `.menu-nav-wrap` is
   the existing pattern to reuse, not a one-off.
