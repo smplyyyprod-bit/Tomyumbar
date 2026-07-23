@@ -236,6 +236,13 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
       var(--shiny-highlight) calc(var(--gradient-percent) * 3),
       transparent calc(var(--gradient-percent) * 4)
     ) border-box;
+  /* Guaranteed solid fill, declared separately from the gradient-ring
+     shorthand above: if a browser can't resolve the @property-driven
+     calc() in that conic-gradient, the whole shorthand computes as
+     invalid and the button goes transparent. This later, independent
+     background-color declaration can't be taken down by that failure
+     — the fill always renders even where the animated ring can't. */
+  background-color: var(--shiny-bg);
   box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle);
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease,
     --gradient-angle-offset var(--shiny-transition), --gradient-percent var(--shiny-transition),
