@@ -186,9 +186,166 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 }
 .btn--outline-light:active { transform: translateY(-1px) scale(0.98); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22); }
 
+/* ---- Shiny CTA ------------------------------------------------------------
+   A flagship treatment for the hero's primary CTA: a slowly rotating
+   conic-gradient border (dots + shimmer + a breathing glow on hover),
+   built on animatable custom properties (@property). Recolored to the
+   brand's maroon/gold instead of black/blue; no third typeface — it
+   inherits Manrope from .btn like every other button. Browsers without
+   @property support just render a static gradient border. */
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-angle-offset {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-percent {
+  syntax: "<percentage>";
+  initial-value: 5%;
+  inherits: false;
+}
+@property --gradient-shine {
+  syntax: "<color>";
+  initial-value: var(--color-cream);
+  inherits: false;
+}
+
+.btn--shiny {
+  --shiny-bg: var(--color-maroon);
+  --shiny-bg-subtle: var(--color-maroon-dark);
+  --shiny-highlight: var(--color-gold);
+  --shiny-highlight-subtle: #d9bd8f;
+  --shiny-duration: 3s;
+  --shiny-transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  border-radius: 360px;
+  color: var(--color-cream);
+  background: linear-gradient(var(--shiny-bg), var(--shiny-bg)) padding-box,
+    conic-gradient(
+      from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+      transparent,
+      var(--shiny-highlight) var(--gradient-percent),
+      var(--gradient-shine) calc(var(--gradient-percent) * 2),
+      var(--shiny-highlight) calc(var(--gradient-percent) * 3),
+      transparent calc(var(--gradient-percent) * 4)
+    ) border-box;
+  box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease,
+    --gradient-angle-offset var(--shiny-transition), --gradient-percent var(--shiny-transition),
+    --gradient-shine var(--shiny-transition);
+}
+
+.btn--shiny::before,
+.btn--shiny::after,
+.btn--shiny span::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+}
+
+.btn--shiny:active { translate: 0 1px; }
+
+/* Dot texture */
+.btn--shiny::before {
+  --size: calc(100% - 4px);
+  --position: 2px;
+  --space: calc(var(--position) * 2);
+  width: var(--size);
+  height: var(--size);
+  background: radial-gradient(circle at var(--position) var(--position), var(--color-cream) calc(var(--position) / 4), transparent 0)
+    padding-box;
+  background-size: var(--space) var(--space);
+  background-repeat: space;
+  -webkit-mask-image: conic-gradient(from calc(var(--gradient-angle) + 45deg), black, transparent 10% 90%, black);
+  mask-image: conic-gradient(from calc(var(--gradient-angle) + 45deg), black, transparent 10% 90%, black);
+  border-radius: inherit;
+  opacity: 0.35;
+}
+
+/* Inner shimmer sweep */
+.btn--shiny::after {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(-50deg, transparent, var(--shiny-highlight), transparent);
+  -webkit-mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+  mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+  opacity: 0.5;
+}
+
+.btn--shiny,
+.btn--shiny::before {
+  animation: shinyGradientAngle var(--shiny-duration) linear infinite,
+    shinyGradientAngle calc(var(--shiny-duration) / 0.4) linear infinite reverse paused;
+  animation-composition: add;
+}
+
+.btn--shiny::after {
+  animation: shinyShimmer calc(var(--shiny-duration) * 1.2) linear infinite,
+    shinyShimmer calc(var(--shiny-duration) * 1.2 / 0.4) linear infinite reverse paused;
+  animation-composition: add;
+}
+
+.btn--shiny span { position: relative; z-index: 1; }
+
+/* Breathing glow behind the label, revealed on hover */
+.btn--shiny span::before {
+  --size: calc(100% + 1rem);
+  width: var(--size);
+  height: var(--size);
+  box-shadow: inset 0 -1ex 2rem 4px var(--shiny-highlight);
+  opacity: 0;
+  transition: opacity var(--shiny-transition);
+  animation: calc(var(--shiny-duration) * 1.5) shinyBreathe linear infinite;
+}
+
+.btn--shiny:is(:hover, :focus-visible) {
+  --gradient-percent: 20%;
+  --gradient-angle-offset: 95deg;
+  --gradient-shine: var(--shiny-highlight-subtle);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle), 0 14px 28px rgba(122, 21, 34, 0.35);
+}
+
+.btn--shiny:is(:hover, :focus-visible),
+.btn--shiny:is(:hover, :focus-visible)::before,
+.btn--shiny:is(:hover, :focus-visible)::after {
+  animation-play-state: running;
+}
+
+.btn--shiny:is(:hover, :focus-visible) span::before { opacity: 1; }
+
+@keyframes shinyGradientAngle {
+  to { --gradient-angle: 360deg; }
+}
+@keyframes shinyShimmer {
+  to { rotate: 360deg; }
+}
+@keyframes shinyBreathe {
+  from, to { scale: 1; }
+  50% { scale: 1.2; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn { transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease; }
   .btn:hover, .btn:active { transform: none; }
+
+  .btn--shiny,
+  .btn--shiny::before,
+  .btn--shiny::after,
+  .btn--shiny span::before {
+    animation: none;
+  }
 }
 
 /* ==========================================================================
