@@ -211,20 +211,16 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 @property --gradient-shine {
   syntax: "<color>";
   /* @property forbids var() in initial-value (must be computationally
-     independent) — this is the literal value of --color-maroon-dark. */
-  initial-value: #591019;
+     independent) — this is the literal value of --color-cream. */
+  initial-value: #f7f2e9;
   inherits: false;
 }
 
 .btn--shiny {
-  /* True black rather than the site's warm --color-ink, deliberately —
-     a glossy/lacquered black CTA reads as premium precisely because
-     it's a true black, not the warm near-black used for page
-     backgrounds elsewhere. Scoped to this one flagship button only. */
-  --shiny-bg: #000;
-  --shiny-bg-subtle: #1a1a1a;
-  --shiny-highlight: var(--color-maroon);
-  --shiny-highlight-subtle: #c8404f;
+  --shiny-bg: var(--color-maroon);
+  --shiny-bg-subtle: var(--color-maroon-dark);
+  --shiny-highlight: var(--color-gold);
+  --shiny-highlight-subtle: #d9bd8f;
   --shiny-duration: 3s;
   --shiny-transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
 
@@ -249,12 +245,7 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
      background-color declaration can't be taken down by that failure
      — the fill always renders even where the animated ring can't. */
   background-color: var(--shiny-bg);
-  /* Glossy/lacquered read: a thin bright rim catching the light along
-     the top edge, and a dark curve rising from the bottom — both
-     plain box-shadow, independent of the background/gradient system
-     above so they render regardless of @property support. */
-  box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle), inset 0 1.5px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -14px 24px -10px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle);
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease,
     --gradient-angle-offset var(--shiny-transition), --gradient-percent var(--shiny-transition),
     --gradient-shine var(--shiny-transition);
@@ -332,8 +323,7 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
   --gradient-angle-offset: 95deg;
   --gradient-shine: var(--shiny-highlight-subtle);
   transform: translateY(-3px) scale(1.02);
-  box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle), inset 0 1.5px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -14px 24px -10px rgba(0, 0, 0, 0.7), 0 14px 28px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 1px var(--shiny-bg-subtle), 0 14px 28px rgba(122, 21, 34, 0.4);
 }
 
 .btn--shiny:is(:hover, :focus-visible),
@@ -594,7 +584,7 @@ html.intro-active {
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  height: clamp(100px, 16vh, 200px);
+  height: clamp(50px, 8vh, 110px);
   background: linear-gradient(180deg, transparent 0%, var(--color-paper) 92%);
   z-index: 1;
   pointer-events: none;
