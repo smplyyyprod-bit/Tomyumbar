@@ -210,15 +210,17 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 }
 @property --gradient-shine {
   syntax: "<color>";
-  initial-value: var(--color-cream);
+  /* @property forbids var() in initial-value (must be computationally
+     independent) — this is the literal value of --color-maroon-dark. */
+  initial-value: #591019;
   inherits: false;
 }
 
 .btn--shiny {
   --shiny-bg: var(--color-ink);
   --shiny-bg-subtle: #2a221d;
-  --shiny-highlight: var(--color-cream);
-  --shiny-highlight-subtle: var(--color-paper);
+  --shiny-highlight: var(--color-maroon);
+  --shiny-highlight-subtle: #c8404f;
   --shiny-duration: 3s;
   --shiny-transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
 
@@ -270,7 +272,7 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
   --space: calc(var(--position) * 2);
   width: var(--size);
   height: var(--size);
-  background: radial-gradient(circle at var(--position) var(--position), var(--color-cream) calc(var(--position) / 4), transparent 0)
+  background: radial-gradient(circle at var(--position) var(--position), var(--shiny-highlight) calc(var(--position) / 4), transparent 0)
     padding-box;
   background-size: var(--space) var(--space);
   background-repeat: space;
