@@ -34,7 +34,7 @@
   // Absolute worst-case fallback (slow/broken network) so the site can
   // never get stuck behind the intro indefinitely — well outside normal
   // operation, just a last-resort safety net.
-  const MAX_WAIT_MS = 15000;
+  const MAX_WAIT_MS = 6000;
 
   let introEnded = false;
   let heroReady = false;
@@ -73,7 +73,7 @@
   // Prefer canplaythrough (smoothest handoff); fall back to canplay if
   // canplaythrough hasn't fired shortly after — it's known to be slow
   // or inconsistent on some browsers/connections.
-  if (heroVideo.readyState >= 4) {
+  if (heroVideo.readyState >= 4 || heroVideo.error) {
     markHeroReady();
   } else if (heroVideo.readyState >= 3) {
     graceTimer = window.setTimeout(markHeroReady, 800);
@@ -86,6 +86,11 @@
       },
       { once: true }
     );
+    // If the hero clip fails outright (bad network, missing file, host
+    // issue), don't sit waiting for a readiness signal that will never
+    // arrive — treat the failure as "ready" and let the hero fall back
+    // to its poster image instead of stalling the whole handoff.
+    heroVideo.addEventListener("error", markHeroReady, { once: true });
   }
 
   // Guard against the intro clip finishing (or erroring) before this
@@ -99,9 +104,18 @@
     introVideo.addEventListener("error", markIntroEnded, { once: true });
   }
 
-  window.setTimeout(() => {
+  // Manual escape hatch: tapping the overlay or pressing Escape jumps
+  // straight to the hero, regardless of what the video elements are
+  // doing. A splash intro should never be able to trap someone.
+  function skipIntro() {
     introEnded = true;
     heroReady = true;
     tryTransition();
-  }, MAX_WAIT_MS);
+  }
+  overlay.addEventListener("click", skipIntro);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") skipIntro();
+  });
+
+  window.setTimeout(skipIntro, MAX_WAIT_MS);
 })();
