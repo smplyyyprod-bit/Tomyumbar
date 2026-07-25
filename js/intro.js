@@ -6,9 +6,12 @@
  *   1. the intro clip has ended
  *   2. the first hero video (#heroVideoA, loaded independently by
  *      js/hero-video.js) is buffered enough to play smoothly
- * — so the hero is always already playing, from its first frame,
- * by the time it's revealed. Respects prefers-reduced-motion by
- * skipping the intro entirely.
+ * — buffered, not playing: js/hero-video.js loads clip one eagerly
+ * but holds off calling .play() until window.TYB_startHeroVideo() is
+ * called below, at the exact moment of handoff, so the hero visibly
+ * starts from its first frame right as the intro ends rather than
+ * having been playing underneath it the whole time. Respects
+ * prefers-reduced-motion by skipping the intro entirely.
  * ------------------------------------------------------------------
  */
 
@@ -20,6 +23,27 @@
   if (!overlay || !introVideo || !hero) return;
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Always land on the hero itself, never wherever a leftover URL hash
+  // (e.g. #menu from a previous nav click) would otherwise scroll to.
+  // A single call isn't reliable — the browser's own hash-scroll can
+  // land at unpredictable points during initial load (raced this: it
+  // varies with how long fonts/video requests take), so this keeps
+  // re-winning that race for a short window instead of trusting one
+  // fixed moment. Harmless to real scrolling either way: during the
+  // intro proper, html.intro-active already blocks scrolling entirely;
+  // for reduced-motion visitors (who can scroll immediately) the window
+  // is short enough that it's over before anyone would act on it.
+  function forceScrollTopFor(ms) {
+    window.scrollTo(0, 0);
+    const deadline = Date.now() + ms;
+    const tick = () => {
+      window.scrollTo(0, 0);
+      if (Date.now() < deadline) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+  forceScrollTopFor(1200);
 
   if (prefersReducedMotion || !heroVideo) {
     overlay.remove();
@@ -46,9 +70,14 @@
     transitioned = true;
     if (graceTimer) clearTimeout(graceTimer);
 
+    // Same leftover-hash guard as above, reapplied right at the reveal
+    // moment in case anything scrolled in the meantime.
+    forceScrollTopFor(1200);
+
     overlay.classList.add("is-fading");
     hero.classList.add("is-visible");
     document.documentElement.classList.add("hero-revealed");
+    if (typeof window.TYB_startHeroVideo === "function") window.TYB_startHeroVideo();
 
     window.setTimeout(() => {
       introVideo.pause();

@@ -82,12 +82,16 @@
   loadInto(active, 0);
   loadInto(standby, nextOf(0));
 
-  active.addEventListener(
-    "canplay",
-    () => {
-      safePlay(active);
-      armWatcher(active);
-    },
-    { once: true }
-  );
+  // The first clip is loaded eagerly (so js/intro.js can tell when it's
+  // buffered enough) but deliberately NOT played yet — playback of clip
+  // one starts only when js/intro.js calls this, at the exact moment
+  // the intro hands off, so the hero visibly starts from its first
+  // frame instead of having been silently playing underneath already.
+  let started = false;
+  window.TYB_startHeroVideo = function () {
+    if (started) return;
+    started = true;
+    safePlay(active);
+    armWatcher(active);
+  };
 })();
